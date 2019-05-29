@@ -6,5 +6,37 @@
 </head>
 <body>
 <h2>Тестовое задание для компании "Skoltech"</h2>
+
+<h3>Примеры запросов:</h3>
+<ul>
+    <li>Сохранение измерения датчика:
+        <br/>
+        fetch('/sensor',{ method: 'POST', headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ sensor: 'Test sensor 1', object: 'Test object 1', value: 24})}
+        ).then(result => result.json().then(console.log))
+    </li>
+    <br/>
+    <li>Выдать все измерения заданного датчика за заданный интервал времени:
+        <br/>
+        fetch('/sensor/getSensorBetweenDates?sensor=Test sensor 1&startDate=26-05-2019&endDate=31-05-2019',
+        { method: 'GET', headers: { 'Content-Type': 'application/json' } }
+        ).then(result => result.json().then(console.log))
+    </li>
+    <br/>
+    <li>Выдать текущие значения всех датчиков для заданного объекта:
+        <br/>
+        fetch('/sensor/getByObject?object=Test object 1',
+        { method: 'GET', headers: { 'Content-Type': 'application/json' } }
+        ).then(result => result.json().then(console.log))
+    </li>
+    <br/>
+    <li>Выдать среднее из текущих значений датчиков для каждого объекта:
+        <br/>
+        fetch('/sensor/getAll',
+        { method: 'GET', headers: { 'Content-Type': 'application/json' } }
+        ).then(result => result.json().then(console.log))
+    </li>
+
+</ul>
 </body>
 </html>

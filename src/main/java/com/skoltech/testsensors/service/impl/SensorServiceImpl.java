@@ -69,7 +69,13 @@ public class SensorServiceImpl implements SensorService {
                 sensorsWithValue = response.get(object);
                 if (sensorsWithValue.containsKey(sensorName)) {
                     Integer value = sensorsWithValue.get(sensorName);
-                    sensorsWithValue.put(sensorName, (value + sensor.getValue()) / 2);
+                    Integer newValue = value + sensor.getValue();
+                    if (newValue == 0) {
+                        sensorsWithValue.put(sensorName, 0);
+                    } else {
+                        sensorsWithValue.put(sensorName, (value + sensor.getValue()) / 2);
+                    }
+
                 } else {
                     sensorsWithValue.put(sensorName, sensor.getValue());
                 }
