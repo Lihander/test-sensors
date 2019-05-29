@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -30,23 +31,23 @@ public class SensorController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
-    @GetMapping("{id}/{startDate}-{endDate}")
-    public ResponseEntity getSensorBetweenDate(@PathVariable String id,
-                                          @PathVariable String startDate,
-                                          @PathVariable String endDate) {
-        List<SensorDto> sensorsDto = sensorService.getByIdBetweenDates(id, startDate, endDate);
+    @GetMapping("/getSensorBetweenDates")
+    public ResponseEntity getSensorBetweenDates(@RequestParam("sensor") String sensor,
+                                          @RequestParam("startDate") String startDate,
+                                          @RequestParam("endDate") String endDate) {
+        List<SensorDto> sensorsDto = sensorService.getBySensorBetweenDates(sensor, startDate, endDate);
         return new ResponseEntity<>(sensorsDto, HttpStatus.OK);
     }
 
-    @GetMapping("getByObject/{object}")
-    public ResponseEntity getByObject(@PathVariable String object) {
-        SensorDto sensorDto = sensorService.getByObject(object);
-        return new ResponseEntity<>(sensorDto, HttpStatus.OK);
+    @GetMapping("/getByObject")
+    public ResponseEntity getByObject(@RequestParam("object") String object) {
+        Map<String, Integer> response = sensorService.getByObject(object);
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/getAll")
     public ResponseEntity getAll() {
-        Map<String, Integer > response = sensorService.getAll();
+        Map<String, Map<String, Integer>> response = sensorService.getAll();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

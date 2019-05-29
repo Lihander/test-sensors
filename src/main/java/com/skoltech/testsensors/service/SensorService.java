@@ -6,7 +6,7 @@ import java.util.Map;
 
 public interface SensorService {
     void save(SensorDto sensorDto);
-    List<SensorDto> getByIdBetweenDates(String id, String startDate, String endDate);
-    SensorDto getByObject(String object);
-    Map<String, Integer> getAll();
+    List<SensorDto> getBySensorBetweenDates(String sensor, String startDate, String endDate);
+    Map<String, Integer>  getByObject(String object);
+    Map<String, Map<String, Integer>> getAll();
 }

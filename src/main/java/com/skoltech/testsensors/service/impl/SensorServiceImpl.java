@@ -21,7 +21,7 @@ public class SensorServiceImpl implements SensorService {
     private final SensorRepo sensorRepo;
     private final ModelMapper modelMapper;
 
-    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MMM-yyyy");
+    private static final SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
 
     @Autowired
     public SensorServiceImpl(SensorRepo sensorRepo, ModelMapper modelMapper) {
@@ -31,19 +31,19 @@ public class SensorServiceImpl implements SensorService {
 
     @Override
     public void save(SensorDto sensorDto) {
+        sensorDto.setDate(new Date());
         Sensor sensor = modelMapper.map(sensorDto, Sensor.class);
         sensorRepo.save(sensor);
-        modelMapper.map(sensor, SensorDto.class);
     }
 
     @Override
-    public List<SensorDto> getByIdBetweenDates(String id, String startDate, String endDate) {
+    public List<SensorDto> getBySensorBetweenDates(String sensor, String startDate, String endDate) {
         try {
             Date start = formatter.parse(startDate);
-            Date end = new SimpleDateFormat("dd/MM/yyyy").parse(endDate);
-            List<Sensor> sensors = sensorRepo.findByIdBetweenDates(Long.parseLong(id), start, end);
-            return sensors.stream().map(sensor ->
-                    modelMapper.map(sensor, SensorDto.class))
+            Date end = formatter.parse(endDate);
+            List<Sensor> sensors = sensorRepo.findBySensorBetweenDates(sensor, start, end);
+            return sensors.stream().map(foundSensor ->
+                    modelMapper.map(foundSensor, SensorDto.class))
                     .collect(Collectors.toList());
         } catch (ParseException e) {
             throw new BadRequestException();
@@ -51,14 +51,34 @@ public class SensorServiceImpl implements SensorService {
     }
 
     @Override
-    public SensorDto getByObject(String object) {
-        Sensor sensor = sensorRepo.findByObject(object);
-        return modelMapper.map(sensor, SensorDto.class);
+    public Map<String, Integer> getByObject(String object) {
+        List<Sensor> sensors = sensorRepo.findByObject(object);
+        return sensors.stream()
+                .collect(Collectors.toMap(Sensor::getSensor, Sensor::getValue, (sensor1, sensor2) -> sensor2));
     }
 
     @Override
-    public Map<String, Integer> getAll() {
+    public Map<String, Map<String, Integer>> getAll() {
+        Map<String, Map<String, Integer>> response = new HashMap<>();
         List<Sensor> sensors = sensorRepo.findAll();
-        return sensors.stream().collect(Collectors.toMap(Sensor::getObject, Sensor::getValue));
+        for (Sensor sensor : sensors) {
+            String object = sensor.getObject();
+            String sensorName = sensor.getSensor();
+            Map<String, Integer> sensorsWithValue;
+            if (response.containsKey(object)){
+                sensorsWithValue = response.get(object);
+                if (sensorsWithValue.containsKey(sensorName)) {
+                    Integer value = sensorsWithValue.get(sensorName);
+                    sensorsWithValue.put(sensorName, (value + sensor.getValue()) / 2);
+                } else {
+                    sensorsWithValue.put(sensorName, sensor.getValue());
+                }
+            } else {
+                sensorsWithValue = new HashMap<>();
+                sensorsWithValue.put(sensor.getSensor(), sensor.getValue());
+            }
+            response.put(object, sensorsWithValue);
+        }
+        return response;
     }
 }

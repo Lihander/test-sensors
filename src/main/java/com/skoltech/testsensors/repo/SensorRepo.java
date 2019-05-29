@@ -10,8 +10,8 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface SensorRepo extends JpaRepository<Sensor, Long> {
-    @Query(value = "from Sensor s where id = :id and date BETWEEN :startDate AND :endDate")
-    List<Sensor> findByIdBetweenDates(@Param("id") Long id, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
+    @Query(value = "from Sensor s where sensor = :sensor and date BETWEEN :startDate AND :endDate")
+    List<Sensor> findBySensorBetweenDates(@Param("sensor") String sensor, @Param("startDate") Date startDate, @Param("endDate") Date endDate);
 
-    Sensor findByObject(String object);
+    List<Sensor> findByObject(String object);
 }
