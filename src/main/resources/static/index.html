@@ -12,20 +12,20 @@
     <li>Сохранение измерения датчика:
         <br/>
         fetch('/sensor',{ method: 'POST', headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ sensor: 'Test sensor 1', object: 'Test object 1', value: 24})}
+            body: JSON.stringify({ currentValue: '22', buildingId: '1'})}
         ).then(result => result.json().then(console.log))
     </li>
     <br/>
     <li>Выдать все измерения заданного датчика за заданный интервал времени:
         <br/>
-        fetch('/sensor/getSensorBetweenDates?sensor=Test sensor 1&startDate=26-05-2019&endDate=31-05-2019',
+        fetch('/sensor/getSensorBetweenDates?sensor=Test sensor 1&startDate=26052019&endDate=31052019',
         { method: 'GET', headers: { 'Content-Type': 'application/json' } }
         ).then(result => result.json().then(console.log))
     </li>
     <br/>
     <li>Выдать текущие значения всех датчиков для заданного объекта:
         <br/>
-        fetch('/sensor/getByObject?object=Test object 1',
+        fetch('/sensor/getCurrentValueByObjectId?object=Test object 1',
         { method: 'GET', headers: { 'Content-Type': 'application/json' } }
         ).then(result => result.json().then(console.log))
     </li>

@@ -1,54 +1,33 @@
 package com.skoltech.testsensors.domain.dto;
 
-import java.util.Date;
+import java.util.List;
 
-public class SensorDto {
-    private Long id;
-    private String object;
-    private String sensor;
-    private Date date;
-    private Integer value;
+public class SensorDto extends AbstractDto {
+    private Integer currentValue;
+    private Long buildingId;
+    private List<SensorHistoryDto> sensorHistory;
 
-    public SensorDto() {
+    public Integer getCurrentValue() {
+        return currentValue;
     }
 
-    public Long getId() {
-        return id;
+    public void setCurrentValue(Integer currentValue) {
+        this.currentValue = currentValue;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public Long getBuildingId() {
+        return buildingId;
     }
 
-    public String getObject() {
-        return object;
+    public void setBuildingId(Long buildingId) {
+        this.buildingId = buildingId;
     }
 
-    public void setObject(String object) {
-        this.object = object;
+    public List<SensorHistoryDto> getSensorHistory() {
+        return sensorHistory;
     }
 
-    public String getSensor() {
-        return sensor;
-    }
-
-    public void setSensor(String sensor) {
-        this.sensor = sensor;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
+    public void setSensorHistory(List<SensorHistoryDto> sensorHistory) {
+        this.sensorHistory = sensorHistory;
     }
 }

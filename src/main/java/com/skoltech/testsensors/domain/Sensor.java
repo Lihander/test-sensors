@@ -1,70 +1,53 @@
 package com.skoltech.testsensors.domain;
 
-import java.util.Date;
+import com.skoltech.testsensors.domain.dto.AbstractDto;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 
 @Entity
-public class Sensor {
-    @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+@Table
+public class Sensor extends AbstractEntity {
+    @Column(nullable = false)
+    private Integer currentValue;
 
-    @Column
-    private String object;
+    @ManyToOne
+    @JoinColumn(name = "building_id")
+    private Building building;
 
-    @Column
-    private String sensor;
-
-    @Column
-    private Date date;
-
-    @Column
-    private Integer value;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sensor", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<SensorHistory> sensorHistory;
 
     public Sensor() {
     }
 
-    public Long getId() {
-        return id;
+    public Integer getCurrentValue() {
+        return currentValue;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setCurrentValue(Integer currentValue) {
+        this.currentValue = currentValue;
     }
 
-    public String getObject() {
-        return object;
+    public Building getBuilding() {
+        return building;
     }
 
-    public void setObject(String object) {
-        this.object = object;
+    public void setBuilding(Building building) {
+        this.building = building;
     }
 
-    public String getSensor() {
-        return sensor;
+    public List<SensorHistory> getSensorHistory() {
+        return sensorHistory;
     }
 
-    public void setSensor(String sensor) {
-        this.sensor = sensor;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
-    }
-
-    public Integer getValue() {
-        return value;
-    }
-
-    public void setValue(Integer value) {
-        this.value = value;
+    public void setSensorHistory(List<SensorHistory> sensorHistory) {
+        this.sensorHistory = sensorHistory;
     }
 }
